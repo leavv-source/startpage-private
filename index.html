@@ -40,7 +40,7 @@
             background-position: center center;
             background-repeat: no-repeat;
             background-attachment: fixed;
-            filter: blur(8px); /* Apply blur effect */
+            filter: blur(12px); /* Apply blur effect */
             z-index: -1; /* Place behind content */
             transform: scale(1.02); /* Slightly scale to avoid blur edges */
         }
@@ -54,7 +54,7 @@
             width: 95%; /* Responsive width */
             display: flex;
             flex-direction: column;
-            gap: 2rem;
+            gap: 3rem; /* Increased gap to prevent overlaps */
             position: relative; /* Needed for absolute positioning of greeting */
             z-index: 1; /* Ensure container is above blurred background */
         }
@@ -99,12 +99,31 @@
             color: #D1D5DB;
             margin-bottom: 0.75rem;
         }
+        /* New styles for the links grid within categories */
+        .links-grid {
+            display: grid;
+            /* Changed to repeat(4, min-content) to ensure up to 4 columns are available
+               and columns only take up as much width as their content, preventing
+               unnecessary spreading when few links are present. */
+            grid-template-columns: repeat(4, min-content);
+            /* Ensure exactly 3 rows for links */
+            grid-template-rows: repeat(3, minmax(24px, 1fr));
+            /* Make items flow down columns first */
+            grid-auto-flow: column;
+            height: 100%; /* Important for column flow to work correctly */
+            gap: 0.5rem; /* Gap between link items */
+            flex-grow: 1; /* Allow the grid to grow */
+        }
         .link-item {
-            padding: 0.5rem 0;
+            padding: 0.25rem 0; /* Reduced vertical padding */
             color: #9CA3AF;
             transition: color 0.2s ease-in-out;
             cursor: pointer;
             padding-left: 0.75rem; /* Added indentation */
+            white-space: nowrap; /* Prevent text wrapping within a link item */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 16px; /* Set font size to 16px */
         }
         .link-item:hover {
             color: #E5E7EB;
@@ -256,14 +275,26 @@
         /* Responsive adjustments */
         @media (min-width: 768px) {
             .main-content {
-                height: 320px;
+                align-items: stretch; /* Allow children to stretch to fill height */
+                height: auto; /* Still auto, but children will dictate height */
+            }
+            .image-section {
+                /* The image's fixed dimensions will set the height for main-content */
+                /* No explicit max-height needed here, as the img itself has fixed dimensions */
+            }
+            .image-section img {
+                /* These dimensions are already set in the HTML for md: breakpoint */
+                /* w-80 h-80 translates to 320px by 320px */
             }
             .categories-section {
-                height: 100%;
+                width: 100%;
+                height: 100%; /* Make categories section take full height of main-content */
+                display: flex; /* Ensure it's a flex container for its child grid */
+                flex-direction: column; /* Ensure it's a flex container for its child grid */
             }
             .category-grid {
-                height: 100%;
-                grid-template-rows: repeat(2, 1fr);
+                height: 100%; /* Make the grid take full height of categories-section */
+                grid-template-rows: repeat(2, 1fr); /* Distribute rows evenly */
             }
         }
         @media (max-width: 767px) {
@@ -328,33 +359,37 @@
             <div class="image-section flex-shrink-0">
                 <img id="mainImage"
                      alt="Main Dashboard Image"
-                     class="w-64 h-64 md:w-80 md:h-80 object-cover aspect-square rounded-xl shadow-md"
+                     class="object-cover aspect-square rounded-xl shadow-md"
                      onerror="this.onerror=null;this.src='https://placehold.co/320x320/333333/6B7280?text=Image+Not+Found';">
             </div>
 
             <div class="categories-section flex-grow">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 category-grid">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 category-grid">
                     <div class="category-box">
                         <div class="category-title">Entertainment</div>
-                        <ul id="entertainmentLinks" class="space-y-1 flex-grow">
+                        <!-- Added 'links-grid' class for the new grid layout -->
+                        <ul id="entertainmentLinks" class="links-grid">
                             </ul>
                     </div>
 
                     <div class="category-box">
                         <div class="category-title">Proactive</div>
-                        <ul id="proactiveLinks" class="space-y-1 flex-grow">
+                        <!-- Added 'links-grid' class for the new grid layout -->
+                        <ul id="proactiveLinks" class="links-grid">
                             </ul>
                     </div>
 
                     <div class="category-box">
                         <div class="category-title">Miscellaneous</div>
-                        <ul id="miscellaneousLinks" class="space-y-1 flex-grow">
+                        <!-- Added 'links-grid' class for the new grid layout -->
+                        <ul id="miscellaneousLinks" class="links-grid">
                             </ul>
                     </div>
 
                     <div class="category-box">
                         <div class="category-title">Utilities</div>
-                        <ul id="utilitiesLinks" class="space-y-1 flex-grow">
+                        <!-- Added 'links-grid' class for the new grid layout -->
+                        <ul id="utilitiesLinks" class="links-grid">
                             </ul>
                     </div>
                 </div>
@@ -402,8 +437,10 @@
             "https://w.wallhaven.cc/full/6d/wallhaven-6do1vw.jpg", // (BTR) - ADDED
             "https://w.wallhaven.cc/full/13/wallhaven-13l2r9.jpg", // (DS) - ADDED
             "https://w.wallhaven.cc/full/9d/wallhaven-9dq9wk.png",  // (ZZZ2) - ADDED
-            "https://w.wallhaven.cc/full/9o/wallhaven-9o63kx.jpg", // (FRIDGE) - ADDED
-            "https://w.wallhaven.cc/full/1p/wallhaven-1p5g5w.png"  // (MOMO) - ADDED
+            // "https://w.wallhaven.cc/full/9o/wallhaven-9o63kx.jpg", (FRIDGE) - ADDED
+            "https://w.wallhaven.cc/full/1p/wallhaven-1p5g5w.png",  // (MOMO) - ADDED
+	    "https://w.wallhaven.cc/full/zx/wallhaven-zxr32g.png", // (R) - ADDED
+	    "https://w.wallhaven.cc/full/9d/wallhaven-9d6zpx.jpg"  // (ZZZ3) - ADDED
 
             // Add more image URLs here
         ];
@@ -451,15 +488,18 @@
                 { name: 'github', url: 'https://github.com/leavv-source' },
                 { name: 'gmail', url: 'https://mail.google.com/mail/u/0/#inbox' },
                 { name: 'blazernet', url: 'https://padlock.idm.uab.edu/cas/login?service=https%3a%2f%2fidm.uab.edu%2fsso%2fblazernet%3finst%3dprod' },
-                { name: 'outlook', url: 'https://outlook.live.com/' } // Added outlook
+                { name: 'outlook', url: 'https://idm.uab.edu/cgi-cas/email' } // Added outlook
             ],
             miscellaneous: [
                 { name: 'MAL', url: 'https://myanimelist.net/animelist/JCLeavv?status=7' },
-                { name: 'wallhaven', url: 'https://wallhaven.cc/' }
+                { name: 'wallhaven', url: 'https://wallhaven.cc/' },
+		        { name: 'reddit', url: 'https://www.reddit.com/' },
+                { name: 'typemonkey', url: 'https://monkeytype.com/' } // Added typemonkey
             ],
             utilities: [
                 { name: 'local', url: 'http://10.0.0.101/' },
-                { name: 'gemini', url: 'https://gemini.google.com/' }
+                { name: 'gemini', url: 'https://gemini.google.com/' },
+                { name: 'nyaa', url: 'https://nyaa.si/' } // Added nyaa
             ]
         };
 
@@ -481,7 +521,7 @@
                         const li = document.createElement('li');
                         const a = document.createElement('a');
                         a.href = link.url;
-                        a.textContent = `~/.${link.name}`; // Removed whitespace here
+                        a.textContent = `~/.${link.name}`;
                         a.classList.add('link-item');
                         li.appendChild(a);
                         ulElement.appendChild(li);
@@ -741,6 +781,28 @@
             }
         }
 
+        // Function to adjust the main image height
+        function adjustMainImageHeight() {
+            const mainImage = document.getElementById('mainImage');
+            const entertainmentCategoryBox = document.querySelector('#entertainmentLinks').closest('.category-box');
+            const miscellaneousCategoryBox = document.querySelector('#miscellaneousLinks').closest('.category-box');
+
+            if (mainImage && entertainmentCategoryBox && miscellaneousCategoryBox) {
+                const entertainmentRect = entertainmentCategoryBox.getBoundingClientRect();
+                const miscellaneousRect = miscellaneousCategoryBox.getBoundingClientRect();
+
+                // Calculate the height from the top of the entertainment category to the bottom of the miscellaneous category
+                const desiredHeight = miscellaneousRect.bottom - entertainmentRect.top;
+
+                // Apply the height to the image
+                mainImage.style.height = `${desiredHeight}px`;
+                mainImage.style.width = 'auto'; // Maintain aspect ratio
+                mainImage.style.objectFit = 'cover'; // Ensure it covers the area
+                mainImage.style.maxWidth = 'none'; // Override any max-width from Tailwind
+                mainImage.style.maxHeight = 'none'; // Override any max-height from Tailwind
+            }
+        }
+
         // Call renderLinks, updateTimeDateAndGreeting, fetchWeatherData, fetchAnimeReleases on page load
         document.addEventListener('DOMContentLoaded', () => {
             setMainImage(); // Set the main image on load
@@ -750,7 +812,11 @@
             fetchWeatherData(); // Initial weather fetch
             setInterval(fetchWeatherData, 3600000); // Update weather every hour (3600000 ms)
             fetchAnimeReleases(); // Initial anime fetch
+            adjustMainImageHeight(); // Call to adjust image height on load
         });
+
+        // Add event listener for window resize to re-adjust image height
+        window.addEventListener('resize', adjustMainImageHeight);
     </script>
 </body>
 </html>
